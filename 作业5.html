@@ -1,0 +1,92 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        div {
+            text-align: center;
+            font-size: 100px;
+            padding: 100px;
+        }
+        
+        button {
+            display: block;
+            margin: 50px auto;
+            width: 500px;
+            height: 100px;
+            font-size: 30px;
+        }
+        
+        span {
+            color: crimson
+        }
+    </style>
+
+</head>
+
+<body>
+    <button id="myButton">Timing start</button>
+    <button id="resetButton" disabled>Reset</button>
+    <div id="demo"></div>
+
+    <script>
+        var oBody = document.getElementById("demo");
+        var i = 0;
+        var timer;
+
+        function timing() {
+            if (!timer) {
+                timer = setInterval(updateNum, 1000);
+            }
+        }
+
+        function reset() {
+            clearInterval(timer);
+            timer = null;
+            i = 0;
+            oBody.innerHTML = "";
+            document.getElementById("myButton").disabled = false;
+            document.getElementById("resetButton").disabled = true;
+        }
+
+        function updateNum() {
+            var j = i++;
+            oBody.innerHTML = "Time passed: " + "<span>" + j + "</span>" + " s";
+        }
+
+        var myButton = document.getElementById("myButton");
+        
+        myButton.addEventListener("click", function() {
+            var now = new Date().getTime();
+            if (now - lastClickTime < 300) {
+                clearInterval(timer);
+                timer = null;
+                document.getElementById("myButton").textContent = " Timing start";
+                document.getElementById("myButton").disabled = false;
+                document.getElementById("resetButton").disabled = false;
+            } else {
+                lastClickTime = now;
+                document.getElementById("myButton").textContent = "Timing pause";
+                document.getElementById("myButton").disabled = false;
+                document.getElementById("resetButton").disabled = false;
+                if (!timer) {
+                    timer = setInterval(updateNum, 1000);
+                }
+            }
+        });
+
+        myButton.addEventListener("dblclick", function() {
+            clearInterval(timer);
+            timer = null;
+            document.getElementById("myButton").textContent = "Timing start";
+            document.getElementById("myButton").disabled = false;
+            document.getElementById("resetButton").disabled = false;
+        });
+
+        var lastClickTime = 0;
+        var resetButton = document.getElementById("resetButton");
+        resetButton.addEventListener("click", reset);
+    
+    </script>
+</body>
+</html>
