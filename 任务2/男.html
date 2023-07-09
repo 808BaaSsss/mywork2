@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body{
+            background-color:rgba(140, 211, 214, 0.467);
+        }
+        #startButton{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width:35%;
+            height:35%;
+            font-size:50px;
+            transition: all 0.3s ease; /* 添加过渡效果 */
+            border-radius: 80px;
+        }    
+        #gameCharacter {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 0);
+            display: none;
+            width:35%;
+            height:80%;
+        }
+        #hair {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 10px;
+            height: 100px;
+            background-color: black;
+            transform-origin: bottom;
+            display: none;
+        }
+        #controlButtons {
+            position: absolute;
+            top: 50%;
+            right: 5%;
+            display: none;
+        }
+        #controlButtons button {
+            width:100%;
+            height:200%;
+            border-radius: 10px;
+            margin: 10px; /* 增大按钮间距 */
+            transition: all 0.3s ease; /* 添加过渡效果 */
+        }
+        button:hover {
+            background-color: rgba(132, 171, 177, 0.455);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* 添加突起效果 */
+        }
+        #tip {
+            position: absolute;
+            left: 5%;
+            top: 50%;
+            transform: translate(0, -50%);
+            display: none;
+            width:20%;
+        }
+    </style>
+</head>
+<body>
+    <button id="startButton" onclick="startGame()">开始</button>
+    <img id="gameCharacter" src="男.jpg">
+    <div id="hair"></div>
+    <div id="controlButtons">
+        <button onclick="confirm()">确认</button>
+        <button onclick="quit()">退出</button>
+        <button onclick="finish()">完成</button>
+    </div>
+    <p id="tip">上下键调节头发长度，左右键调整头发倾斜角度，点击确认按钮，按下空格键开始植发！</p>
+    <script>
+        var hair = document.getElementById('hair');
+        var gameCharacter = document.getElementById('gameCharacter');
+        var startButton = document.getElementById('startButton');
+        var controlButtons = document.getElementById('controlButtons');
+        var hairTransform = 0;
+        var hairHeight = 100;
+        var falling = false;
+        var currentLeft;
+        var moving = false;
+        var direction = 1;
+
+        function startGame() {
+            hair.style.left = '50%'; 
+            startButton.style.display = 'none';
+            gameCharacter.style.display = 'block';
+            hair.style.display = 'block';
+            controlButtons.style.display = 'flex'; // 修改为弹性布局
+            controlButtons.style.flexDirection = 'column'; // 设置主轴方向为竖直方向
+            document.getElementById('tip').style.display = 'block';
+        }
+
+        document.onkeydown = function(e) {
+            switch (e.keyCode) {
+                case 37:
+                    hairTransform -= 5;
+                    hair.style.transform = 'rotate(' + hairTransform + 'deg)';
+                    break;
+                case 39:
+                    hairTransform += 5;
+                    hair.style.transform = 'rotate(' + hairTransform + 'deg)';
+                    break;
+                case 38:
+                    hairHeight += 5;
+                    hair.style.height = hairHeight + 'px';
+                    break;
+                case 40:
+                    hairHeight -= 5;
+                    hair.style.height = hairHeight + 'px';
+                    break;
+                case 32:
+                    if (moving) {
+                        moving = false;
+                        falling = true; // 开始下落
+                        currentLeft = hair.style.left; // 获取当前位置
+                        hair.style.top = window.getComputedStyle(hair).getPropertyValue('top'); // 获取当前top像素值
+                    }
+                    break;
+            }
+        }
+
+        setInterval(function() {
+            if (moving) {
+                hair.style.left = parseInt(hair.style.left) + 1 * direction + '%';
+                if (parseInt(hair.style.left) > 90 || parseInt(hair.style.left) < 10) {
+                direction *= -1;
+                }
+            }
+            if (falling) {
+                hair.style.top = parseInt(window.getComputedStyle(hair).getPropertyValue('top')) + 30 + 'px'; // 垂直下移
+                hair.style.left = currentLeft; // 保持left属性不变
+                if (parseInt(window.getComputedStyle(hair).getPropertyValue('top')) >= parseInt(window.getComputedStyle(gameCharacter).getPropertyValue('top')) ) {
+                    falling = false; // 到达目标后停止下落  
+                    var newHair = hair.cloneNode(true);// 创建新的hair元素
+                    newHair.style.top = '0';
+                    newHair.style.left = '50%';
+                    document.body.appendChild(newHair);
+                    hair = newHair;
+                }
+            }
+        }, 100);
+
+        function confirm() {
+            moving = true;
+        }
+
+        function quit() {
+            location.reload();
+        }
+
+        function finish() {
+            alert('植发成功！');
+            hair.style.display = 'none';
+            tip.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+
+
+
+
