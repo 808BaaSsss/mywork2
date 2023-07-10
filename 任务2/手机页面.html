@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body{
+            background-color:rgba(255, 245, 105, 0.384);
+        }
+        #content {
+            box-sizing: border-box; 
+            width: 80%; /* 添加这一行，设置宽度为80% */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            border: 100px double rgb(255, 251, 247); /* 双线边框 */
+            padding: 50px 10%; /*设置内边距为10% */
+            border-radius: 180px;
+        }
+        input[type="radio"] {
+            transform: scale(2); /* 放大单选按钮 */
+        }
+        label {
+            font-size: 30px; /* 放大标签文字 */
+        }
+        button {
+            font-size: 20px; /* 放大按钮文字 */
+            padding: 20px 60px; /* 增大按钮大小 */
+            margin-top:20px;
+            border-radius: 40px;
+            background-color: rgba(249, 226, 21, 0.866);
+            transition: all 0.3s ease; /* 添加过渡效果 */
+        }
+        button:hover {
+            background-color: rgba(253, 237, 8, 0.427);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* 添加突起效果 */
+        }
+        #question{
+            font-size: 40px;
+        } 
+    </style>
+</head>
+<body onload="welcome()">
+    <div id="content">
+        <p id="question">植发对象是？</p>
+        <input type="radio" id="male" name="gender" value="男">
+        <label for="male">男性</label><br>
+        <input type="radio" id="female" name="gender" value="女">
+        <label for="female">女性</label><br>
+        <button onclick="submit()">提交</button>
+    </div>
+    <script>
+        function welcome() {
+            alert("欢迎！");
+        }
+        function submit() {
+            var gender = document.querySelector('input[name="gender"]:checked').value;
+            if (gender == "男") {
+                window.location.href = "男1.html";
+            } else if (gender == "女") {
+                window.location.href = "女1.html";
+            }
+        }
+    </script>
+</body>
+</html>
